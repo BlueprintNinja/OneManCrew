@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Quest Input Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #ffefd5; /* Peach background for a warm feel */
+            color: #4a4a4a; /* Slightly softer text color for better readability */
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            color: #ff4500; /* Orangish text for a pop of color */
+            margin-top: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column; /* Stack form and output vertically */
+            align-items: center; /* Center align the items */
+            max-width: 1200px;
+            margin: 20px auto; /* Center the container */
+        }
+        form {
+            width: 90%; /* Responsive width */
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 16px; /* More pronounced rounded corners */
+            box-shadow: 0 4px 6px rgba(50,50,93,0.11), 0 1px 3px rgba(0,0,0,0.08); /* Softer shadow */
+            margin-bottom: 20px; /* Space between form and output */
+        }
+        .output {
+            width: 90%; /* Responsive width */
+            padding: 20px;
+            background-color: #fafafa; /* Lighter background for the output */
+            border: 2px dashed #ff4500; /* Dashed border for a playful touch */
+            border-radius: 16px; /* More pronounced rounded corners */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Lighter shadow */
+        }
+        input[type="text"], textarea {
+            width: calc(100% - 24px); /* Full width minus padding */
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #ff4500; /* Orangish border for consistency */
+            border-radius: 8px; /* Rounded corners for inputs */
+            font-size: 16px; /* Larger font size for better readability */
+        }
+        button, input[type="submit"] {
+            padding: 12px 20px;
+            background-color: #32cd32; /* Green color for actions */
+            color: #fff;
+            border: none;
+            border-radius: 8px; /* Consistent rounded corners */
+            cursor: pointer;
+            transition: background-color 0.3s; /* Smooth background color transition */
+        }
+        button:hover, input[type="submit"]:hover {
+            background-color: #228b22; /* Darker green on hover */
+        }
+        input[type="submit"] {
+            width: 100%; /* Full width for submit button */
+            font-size: 20px; /* Larger font size for submit button */
+        }
+    </style>
+    <script>
+        // Function to set sample values
+        function setSample(sampleNumber, inputId) {
+            var samples = {
+                'product': [
+                    "NarrativeNexus - A platform that generates immersive story worlds for writers and game designers using LLMs.",
+                    "CopyCraft - An AI-powered tool that crafts compelling marketing copy and product descriptions.",
+                    "InsightfulInterviewer - An LLM-based application that creates engaging interview questions for podcasts and articles."
+                ],
+                'agentType': [
+                    "Creative Content Architect - Designs and oversees the production of diverse content using LLMs.",
+                    "Strategic Storyteller - Uses LLMs to create narratives that resonate with target audiences.",
+                    "AI Content Analyst - Evaluates and refines LLM-generated content for quality and relevance."
+                ],
+                'goally': [
+                    "To produce a series of blog posts that highlight the intersection of technology and creativity.",
+                    "To generate a whitepaper that explores the capabilities and ethics of using LLMs in content creation.",
+                    "To create a portfolio of sample marketing materials using LLMs for potential clients."
+                ],
+                'story': [
+                    "A seasoned journalist who embraced AI to revolutionize storytelling and content creation.",
+                    "A marketing guru who now leverages LLMs to produce innovative and persuasive content.",
+                    "A scriptwriter turned tech enthusiast, exploring new frontiers in automated content generation."
+                ],
+                'taskone': [
+                    "Use an LLM to draft an original short story set in a futuristic world.",
+                    "Develop a series of educational articles on the benefits of LLMs in content creation.",
+                    "Generate a script for an explainer video on the latest advancements in LLM technology."
+                ],
+                'expectedone': [
+                    "A captivating short story ready for publication on digital platforms.",
+                    "A collection of informative articles, complete with infographics and data visualizations.",
+                    "A detailed script with clear narration and suggestions for visual elements."
+                ],
+                'tasktwo': [
+                    "Edit and polish the LLM-generated short story to enhance its narrative flow.",
+                    "Curate the articles into an eBook format for distribution to industry professionals.",
+                    "Coordinate with a production team to turn the script into a finished explainer video."
+                ],
+                'expectedtwo': [
+                    "A refined short story with improved character development and plot structure.",
+                    "An eBook with a professional layout, ready for publishing and sharing.",
+                    "A high-quality explainer video, complete with animations and voice-over."
+                ]
+            };
+            document.getElementById(inputId).value = samples[inputId][sampleNumber];
+        }
+        function handleSubmit(event) {
+            event.preventDefault(); // Prevent the form from submitting
+            var formData = new FormData(event.target); // Create a FormData object from the form
+
+            fetch('/', { // POST request to the current URL
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Assuming 'data' is the result you want to display
+                // and there's an element with the ID 'resultContainer' in your HTML
+                var resultContainer = document.getElementById('resultContainer');
+                var formattedResult = `
+                    <div style="border: 1px solid #ccc; padding: 10px; margin-top: 10px; max-width: 1000px;">
+                    <h2>Result</h2>
+                    <p>${data.result.replace(/\\*/g, '').split('\n').join('<br>')}</p>
+                    </div>
+                    `;
+
+                resultContainer.innerHTML = formattedResult;
+            })
+            .catch(error => {
+                console.error('Error:', error); // Handle any errors
+            });
+        }
+        window.onload = function() {
+            var resultContainer = document.getElementById('resultContainer');
+            resultContainer.innerHTML = '<p>Generated Content will Appear Here.</p>';
+        }
+    </script>
+</head>
+<body>
+    <h1>Welcome to the Creative Quest!</h1>
+    <div class="container">
+        <form onsubmit="handleSubmit(event)">
+            <label for="product">Product:</label>
+            <input type="text" id="product" name="product" required>
+            <button type="button" onclick="setSample(0, 'product')">NarrativeNexus</button>
+            <button type="button" onclick="setSample(1, 'product')">CopyCraft</button>
+            <button type="button" onclick="setSample(2, 'product')">InsightfulInterviewer</button>
+            <br><br>
+
+            <label for="agentType">Agent Role:</label>
+            <input type="text" id="agentType" name="agentType" required>
+            <button type="button" onclick="setSample(0, 'agentType')">Creative Content Architect</button>
+            <button type="button" onclick="setSample(1, 'agentType')">Strategic Storyteller</button>
+            <button type="button" onclick="setSample(2, 'agentType')">AI Content Analyst</button>
+            <br><br>
+
+            <label for="goally">Agent Goal:</label>
+            <input type="text" id="goally" name="goally" required>
+            <button type="button" onclick="setSample(0, 'goally')">Blog Post Series</button>
+            <button type="button" onclick="setSample(1, 'goally')">LLM Whitepaper</button>
+            <button type="button" onclick="setSample(2, 'goally')">Marketing Portfolio</button>
+            <br><br>
+
+            <label for="story">Agent Backstory:</label>
+            <textarea id="story" name="story" required></textarea>
+            <button type="button" onclick="setSample(0, 'story')">Journalist Story</button>
+            <button type="button" onclick="setSample(1, 'story')">Marketing Guru Story</button>
+            <button type="button" onclick="setSample(2, 'story')">Scriptwriter Story</button>
+            <br><br>
+
+            <label for="taskone">Task One:</label>
+            <textarea id="taskone" name="taskone" required></textarea>
+            <button type="button" onclick="setSample(0, 'taskone')">Draft Short Story</button>
+            <button type="button" onclick="setSample(1, 'taskone')">Educational Articles</button>
+            <button type="button" onclick="setSample(2, 'taskone')">Generate Script</button>
+            <br><br>
+
+            <label for="expectedone">Expected Output One:</label>
+            <textarea id="expectedone" name="expectedone" required></textarea>
+            <button type="button" onclick="setSample(0, 'expectedone')">Publication-Ready Story</button>
+            <button type="button" onclick="setSample(1, 'expectedone')">Article Collection</button>
+            <button type="button" onclick="setSample(2, 'expectedone')">Script with Visuals</button>
+            <br><br>
+
+            <label for="tasktwo">Task Two:</label>
+            <textarea id="tasktwo" name="tasktwo" required></textarea>
+            <button type="button" onclick="setSample(0, 'tasktwo')">Edit Story</button>
+            <button type="button" onclick="setSample(1, 'tasktwo')">Curate eBook</button>
+            <button type="button" onclick="setSample(2, 'tasktwo')">Video Production</button>
+            <br><br>
+
+            <label for="expectedtwo">Expected Output Two:</label>
+            <textarea id="expectedtwo" name="expectedtwo" required></textarea>
+            <button type="button" onclick="setSample(0, 'expectedtwo')">Refined Story</button>
+            <button type="button" onclick="setSample(1, 'expectedtwo')">Ready-to-Publish eBook</button>
+            <button type="button" onclick="setSample(2, 'expectedtwo')">Finished Explainer Video</button>
+            <br><br>
+
+
+            <input type="submit" value="Submit">
+        </form>
+        <div class="output" id="resultContainer">
+            <!-- The result will be displayed here -->
+        </div>
+    </div>
+</body>
+</html>
